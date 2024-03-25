@@ -10,7 +10,6 @@ import { uniqueId } from "lodash";
 const SearchBox = () => {
   const dispatcher = useDispatch();
   const characters: Result<Character> | null = useSelector((store: IRootState) => store.character.characters);
-  const [characterData, SetCharacterData] = useState<Array<Character>>([]);
   const [inputValue, SetInputValue] = useState<string>("");
   const [selectedValues, SetSelectedValues] = useState<Array<Character>>([]);
 
@@ -20,13 +19,6 @@ const SearchBox = () => {
       dispatcher(resetCharactersAction())
     }
   }, []);
-
-  useEffect(() => {
-    console.log(characters)
-    if (characters) {
-      SetCharacterData(characters.results ?? [])
-    }
-  }, [characters]);
 
   const onInputChange = (event: SyntheticEvent<Element, Event>, value: string) => {
     SetInputValue(value);
@@ -86,7 +78,7 @@ const SearchBox = () => {
           <img loading="lazy" width="60px" src={option.image} />
           <Stack>
             {getNameText(option.name)}
-            <span>{`${option.episode.length} episodes`}</span>
+            <span>{`${option.episode?.length} episodes`}</span>
           </Stack>
         </Box>
       )}
