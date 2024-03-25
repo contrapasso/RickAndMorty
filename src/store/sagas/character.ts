@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { GET_CHARACTERS } from '../actions/character';
 import { getCharactersErrorAction, getCharactersSuccessAction } from '../actionCreators/character';
 import { Connector } from '@/serviceConnectors/connector';
@@ -12,7 +12,7 @@ export default function* rootSaga() {
 }
 
 function* watchGetCharacters() {
-    yield takeEvery(
+    yield takeLatest(
         GET_CHARACTERS, getCharacters
     );
 }

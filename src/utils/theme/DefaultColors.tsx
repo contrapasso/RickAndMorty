@@ -144,7 +144,8 @@ const baseLightTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: "20px",
-          borderColor: "#8E8A89"
+          borderColor: "#8E8A89",
+          width: "400px"
         },
       }
     },

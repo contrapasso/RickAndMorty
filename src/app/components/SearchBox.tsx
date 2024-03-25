@@ -5,46 +5,30 @@ import { Result } from "@/types/result";
 import { Autocomplete, Box, Checkbox, Stack, TextField } from "@mui/material";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { uniqueId } from "lodash";
 
 const SearchBox = () => {
   const dispatcher = useDispatch();
   const characters: Result<Character> | null = useSelector((store: IRootState) => store.character.characters);
-  const [characterData, SetCharacterData] = useState<Array<any>>([]);
+  const [characterData, SetCharacterData] = useState<Array<Character>>([]);
   const [inputValue, SetInputValue] = useState<string>("");
-  const [selectedValues, SetSelectedValues] = useState<Array<any>>([]);
+  const [selectedValues, SetSelectedValues] = useState<Array<Character>>([]);
 
   useEffect(() => {
+    dispatcher(getCharactersAction());
     return () => {
       dispatcher(resetCharactersAction())
     }
   }, []);
 
   useEffect(() => {
+    console.log(characters)
     if (characters) {
-      const data = !!characters.results
-        ? characters.results?.map(result => {
-          return {
-            id: result.id,
-            name: result.name,
-            image: result.image,
-            episodeCount: result.episode?.length
-          }
-        })
-        : [];
-      SetCharacterData(data)
+      SetCharacterData(characters.results ?? [])
     }
   }, [characters]);
 
-  const resetCharacterData = () => {
-    SetCharacterData([]);
-  }
-
   const onInputChange = (event: SyntheticEvent<Element, Event>, value: string) => {
-    if (!value) {
-      resetCharacterData();
-      return;
-    };
-
     SetInputValue(value);
     const filter = `name=${value}`
     dispatcher(getCharactersAction(filter))
@@ -74,10 +58,9 @@ const SearchBox = () => {
   return (
     <Autocomplete
       multiple
-      sx={{ width: "400px" }}
       onInputChange={onInputChange}
       onChange={onChange}
-      options={characterData}
+      options={characters?.results ?? []}
       value={selectedValues}
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -94,19 +77,16 @@ const SearchBox = () => {
       )}
       renderOption={(props, option, { selected }) => (
         <Box
+          {...props}
+          key={uniqueId()}
           component="li"
           sx={{ '& > img': { mr: 2, flexShrink: 0, borderRadius: "15px" } }}
-          {...props}
         >
           <Checkbox checked={selected} />
-          <img
-            loading="lazy"
-            width="60px"
-            src={option.image}
-          />
+          <img loading="lazy" width="60px" src={option.image} />
           <Stack>
             {getNameText(option.name)}
-            <span>{`${option.episodeCount} episodes`}</span>
+            <span>{`${option.episode.length} episodes`}</span>
           </Stack>
         </Box>
       )}

@@ -22,6 +22,5 @@ export const character = createReducer(initialState, (builder) => {
     })
     .addCase(RESET_CHARACTERS, (state) => {
       state.characters = initialState.characters;
-    })
-    .addDefaultCase(() => initialState);
+    });
 })
