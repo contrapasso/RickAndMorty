@@ -34,17 +34,24 @@ https://rick-and-morty-mu-six.vercel.app/
 - `src/types`: Contains types.
 - `src/utils`: Contains utilities such as themes.
 
-## Usage
+## Example Usage
 ```tsx
-import React from 'react';
-import MultiSelectAutocomplete from './components/MultiSelectAutocomplete';
+import PageContainer from "../components/PageContainer";
+import { Box, Grid } from "@mui/material";
+import SearchBox from "../components/SearchBox";
+import styles from "../components/styles.module.scss";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Multi-Select Autocomplete Component</h1>
-      <MultiSelectAutocomplete />
-    </div>
+    <PageContainer>
+      <Box>
+        <Grid container >
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", mt: 3, p: 1 }}>
+            <SearchBox />
+          </Grid>
+        </Grid>
+      </Box>
+    </PageContainer>
   );
 }
 
